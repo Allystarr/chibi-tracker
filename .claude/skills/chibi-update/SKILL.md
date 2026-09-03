@@ -23,6 +23,16 @@ clones the repo fresh — the procedure must work from repo contents alone.
   (sleeves, badges, playmats), and non-chibi "extended art" / "new artwork" variants
   that happen to share a set with chibi cards.
 
+## Cloud-run note
+
+When running as the scheduled cloud routine, the sandbox's egress proxy may block
+some domains (observed 2026-09-03: yugipedia.com, db.yugioh-card.com,
+ygorganization.com, tcgcsv.com — while WebSearch works fine). Handle gracefully:
+lean on WebSearch for discovery, skip the price refresh if tcgcsv.com is
+unreachable (note it in the commit message), and still publish any new cards found.
+If the user has since allowed those domains in the environment's network settings,
+the full procedure applies.
+
 ## Procedure
 
 1. **Read** `chibi-cards.csv`. Build the set of known (Card Name, Set Code) pairs.
