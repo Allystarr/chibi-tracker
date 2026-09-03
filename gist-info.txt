@@ -1,0 +1,4 @@
+b7363102526caf9e40122bbc4a7b5516
+https://gist.githubusercontent.com/Allystarr/b7363102526caf9e40122bbc4a7b5516/raw/chibi-cards.csv
+https://gist.githubusercontent.com/Allystarr/b7363102526caf9e40122bbc4a7b5516/raw/chibi-cards-tcg.csv
+https://gist.githubusercontent.com/Allystarr/b7363102526caf9e40122bbc4a7b5516/raw/chibi-cards-ocg.csv
