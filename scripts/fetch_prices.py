@@ -86,7 +86,7 @@ for r in body:
     priced += 1
 
 with open(root / "chibi-cards.csv", "w", newline="", encoding="utf-8") as f:
-    w = csv.writer(f)
+    w = csv.writer(f, lineterminator="\n")
     w.writerow(header)
     w.writerows(body)
 print(f"priced {priced} TCG prints; {sum(1 for r in body if r[i_game]=='TCG' and not r[i_price])} TCG prints had no listing")

@@ -16,7 +16,7 @@ game_idx = header.index("Game")
 for game in ("TCG", "OCG"):
     out = root / f"chibi-cards-{game.lower()}.csv"
     with open(out, "w", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
+        w = csv.writer(f, lineterminator="\n")
         w.writerow(header)
         w.writerows(r for r in body if r[game_idx] == game)
     print(out.name, sum(1 for r in body if r[game_idx] == game), "cards")
