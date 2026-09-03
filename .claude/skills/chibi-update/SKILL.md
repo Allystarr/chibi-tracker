@@ -5,9 +5,12 @@ description: Check for newly revealed/released Yu-Gi-Oh chibi alternate-art card
 
 # Update the Yu-Gi-Oh Chibi Card Tracker
 
-The master list lives in `chibi-cards.csv` at the project root. It feeds the user's
-Google Sheet via `=IMPORTDATA()` pointed at a GitHub gist raw URL (gist info in
-`gist-info.txt` at the project root, if it exists yet).
+The master list lives in `chibi-cards.csv` at the project root. This project is the
+git repo `Allystarr/chibi-tracker` (public); the user's Google Sheet reads the split
+feeds via `=IMPORTDATA()` from
+`https://raw.githubusercontent.com/Allystarr/chibi-tracker/main/chibi-cards-tcg.csv`
+(and `...-ocg.csv`). This skill also runs unattended as a daily cloud routine, which
+clones the repo fresh — the procedure must work from repo contents alone.
 
 ## Scope — what counts as a chibi card
 
@@ -74,15 +77,11 @@ Google Sheet via `=IMPORTDATA()` pointed at a GitHub gist raw URL (gist info in
    project root. It rebuilds `chibi-cards-tcg.csv` and `chibi-cards-ocg.csv` from the
    master (the user's sheet has one tab per game, each importing its own file).
 
-7. **Publish** to the gist so the Google Sheet picks it up:
-   - If `gist-info.txt` exists, it contains the gist ID on the first line. Run for
-     each of the three CSVs:
-     `gh gist edit <gist-id> --filename <file>.csv <file>.csv`
-   - If it doesn't exist yet, create the gist:
-     `gh gist create chibi-cards.csv --desc "Yu-Gi-Oh chibi card master list"`
-     then write the gist ID to `gist-info.txt` (line 1: id, line 2: raw URL in the form
-     `https://gist.githubusercontent.com/<github-user>/<gist-id>/raw/chibi-cards.csv`)
-     and tell the user to point their sheet's `IMPORTDATA` at that raw URL.
+7. **Publish** so the Google Sheet picks it up: commit all changed CSVs and push.
+   `git add chibi-cards.csv chibi-cards-tcg.csv chibi-cards-ocg.csv`
+   `git commit -m "chibi-update: <N new cards | price refresh> <date>"`
+   `git push origin main`
+   If nothing changed at all (no new cards AND no price movement), skip the commit.
 
 8. **Report** to the user: which new cards were added (name, set, code, date), or
    "no new chibi cards found" with the sources checked. Remind them the Google Sheet

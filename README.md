@@ -6,9 +6,9 @@ Tracks every printed chibi alternate-art card in the Yu-Gi-Oh! OCG/TCG
 ## How it works
 
 ```
-chibi-cards.csv  ──gh gist──►  GitHub gist (raw CSV URL)  ──IMPORTDATA──►  Google Sheet
-        ▲
-   /chibi-update skill appends new releases
+chibi-cards.csv ──git push──► github.com/Allystarr/chibi-tracker ──IMPORTDATA──► Google Sheet
+        ▲                                    ▲
+   /chibi-update skill (local)      daily cloud routine (3am Pacific)
 ```
 
 - `chibi-cards.csv` — master list, one row **per print** (79 prints as of Sept 2026).
@@ -16,18 +16,20 @@ chibi-cards.csv  ──gh gist──►  GitHub gist (raw CSV URL)  ──IMPORT
 - `chibi-cards-tcg.csv` / `chibi-cards-ocg.csv` — per-game feeds regenerated from the
   master by `scripts/split_csv.py`; the sheet has one tab per game, each importing
   its own file.
-- `gist-info.txt` — gist ID (line 1) and raw URL (line 2). Created when the gist is
-  first published.
 - `.claude/skills/chibi-update/SKILL.md` — run `/chibi-update` in Claude Code to
-  check Yugipedia + news for new chibi cards, append them, and push to the gist.
-  The Google Sheet then refreshes on its own within ~1 hour.
+  check Yugipedia + news for new chibi cards, append them, refresh prices, and push.
+  A scheduled cloud routine also runs the same procedure daily at 3am Pacific, so
+  the sheet stays current even if you never run it manually. The Google Sheet
+  refreshes on its own within ~1 hour of any push.
+- Legacy: the original gist feed (`gist.github.com/b7363102526caf9e40122bbc4a7b5516`)
+  is frozen — the repo raw URLs below are canonical.
 
 ## One-time Google Sheet setup (phone or desktop)
 
 1. Create a new Google Sheet (sheets.new), name it e.g. **Chibi Collection**.
 2. Make two tabs: **TCG** and **OCG**. In cell **A1** of each, paste the matching formula:
-   - TCG tab: `=IMPORTDATA("https://gist.githubusercontent.com/Allystarr/b7363102526caf9e40122bbc4a7b5516/raw/chibi-cards-tcg.csv")`
-   - OCG tab: `=IMPORTDATA("https://gist.githubusercontent.com/Allystarr/b7363102526caf9e40122bbc4a7b5516/raw/chibi-cards-ocg.csv")`
+   - TCG tab: `=IMPORTDATA("https://raw.githubusercontent.com/Allystarr/chibi-tracker/main/chibi-cards-tcg.csv")`
+   - OCG tab: `=IMPORTDATA("https://raw.githubusercontent.com/Allystarr/chibi-tracker/main/chibi-cards-ocg.csv")`
    Columns A–J fill with the card list automatically (I–J are TCGplayer market
    prices per rarity, refreshed by `/chibi-update` via `scripts/fetch_prices.py`;
    OCG promos show `n/a` — no TCGplayer market for them).
