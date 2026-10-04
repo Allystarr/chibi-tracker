@@ -87,10 +87,17 @@ the full procedure applies.
    project root. It rebuilds `chibi-cards-tcg.csv` and `chibi-cards-ocg.csv` from the
    master (the user's sheet has one tab per game, each importing its own file).
 
-7. **Publish** so the Google Sheet picks it up: commit all changed CSVs and push.
+7. **Publish** so the Google Sheet picks it up. The container sometimes clones with
+   `HEAD` detached rather than on `main` — committing there doesn't move `main`, so a
+   later `git push origin main` silently no-ops (reports success, pushes nothing).
+   Always check and fix this *before* committing:
+   `git symbolic-ref -q HEAD || git branch -f main HEAD && git checkout main`
+   Then:
    `git add chibi-cards.csv chibi-cards-tcg.csv chibi-cards-ocg.csv`
    `git commit -m "chibi-update: <N new cards | price refresh> <date>"`
    `git push origin main`
+   After pushing, confirm with `git log --oneline -1 origin/main` that it matches
+   your new commit — don't just trust the push command's exit code.
    If nothing changed at all (no new cards AND no price movement), skip the commit.
 
 8. **Report** to the user: which new cards were added (name, set, code, date), or
